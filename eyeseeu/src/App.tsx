@@ -1,13 +1,18 @@
-import './App.css'
+import { BrowserRouter as Router } from 'react-router-dom'
+import CameraFaceMesh from './components/CameraFaceMesh'
+import AppRouter from './navigation/Router'
 
 function App() {
-
   return (
-    <>
-      <h1 className="text-red-500 text-3xl font-bold underline">
-        Hello world!
-      </h1>
-    </>
+    <Router>
+      <div style={{ position: 'relative' }}>
+        {/* 항상 떠있는 카메라 */}
+        <CameraFaceMesh />
+
+        {/* 화면 라우팅 */}
+        <AppRouter />
+      </div>
+    </Router>
   )
 }
 
