@@ -1,6 +1,4 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import CameraFaceMesh from '../components/CameraFaceMesh'
 
 export default function HomeScreen() {
   const navigate = useNavigate()
