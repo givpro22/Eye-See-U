@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import AdminSidebar from '../../components/admin/layout/AdminSidebar';
-// import AdminTopbar from '../../components/admin/layout/AdminTopbar';
 import ProductListScreen from './ProductListScreen';
 import AdminTopbar from '../../components/admin/layout/AdminTopbar';
 import DashboardScreen from './DashboardScreen'; // 필요 시 사용
-// import OrderListScreen from './OrderListScreen'; // 필요 시 사용
+import OrderListScreen from './OrderListScreen'; // 필요 시 사용
 
 const AdminHomeScreen = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'products' | 'orders'>('dashboard');
@@ -15,8 +14,8 @@ const AdminHomeScreen = () => {
         return <DashboardScreen />;
       case 'products':
         return <ProductListScreen />;
-      // case 'orders':
-      //   return <OrderListScreen />;
+      case 'orders':
+        return <OrderListScreen />;
       default:
         return null;
     }

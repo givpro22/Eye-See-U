@@ -24,7 +24,7 @@ const DashboardScreen = () => {
         <BestProductCard
           name="페퍼로니 피자"
           price={6000}
-          image="/images/menus/pizza.png"
+          image="/images/menus/burger1.png"
         />
         <SalesTrendChart />
       </section>

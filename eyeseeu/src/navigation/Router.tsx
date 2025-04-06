@@ -17,7 +17,6 @@ const Router = () => {
       <Route
         path="/admin/home"
         element={<AdminHomeScreen />}
-        // element={isLoggedIn ? <AdminHomeScreen /> : <Navigate to="/admin/login" replace />}
       />
 
       {/* 키오스크 라우트 */}

@@ -32,6 +32,16 @@ const AdminLoginScreen: React.FC = () => {
           <p className="text-text-secondary text-sm mt-2">여기는 관리자 페이지 입니다</p>
         </div>
 
+        {/* 키오스크 전환 버튼 */}
+        <div className="mb-6 text-center">
+          <button
+            onClick={() => navigate('/kiosk/login')}
+            className="text-sm text-primary font-semibold hover:underline"
+          >
+            키오스크로 전환
+          </button>
+        </div>
+
         {/* 로그인 폼 */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>

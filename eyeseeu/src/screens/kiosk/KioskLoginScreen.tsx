@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const KioskLoginScreen: React.FC = () => {
+const AdminLoginScreen: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -11,17 +11,17 @@ const KioskLoginScreen: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
-
     e.preventDefault();
+    navigate('/admin/home');
 
     if (email && password) {
-      // login();
-      // navigate('/admin/home');
+      login();
+      navigate('/admin/home');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
+    <div className="min-h-screen flex items-center justify-center bg-primary px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg px-8 py-10">
         {/* 상단 제목 */}
         <div className="text-center mb-8">
@@ -30,6 +30,16 @@ const KioskLoginScreen: React.FC = () => {
             <span>Eye See You</span>
           </div>
           <p className="text-text-secondary text-sm mt-2">여기는 키오스크 페이지 입니다</p>
+        </div>
+
+        {/* 키오스크 전환 버튼 */}
+        <div className="mb-6 text-center">
+          <button
+            onClick={() => navigate('/admin/login')}
+            className="text-sm text-primary font-semibold hover:underline"
+          >
+            키오스크로 전환
+          </button>
         </div>
 
         {/* 로그인 폼 */}
@@ -92,4 +102,4 @@ const KioskLoginScreen: React.FC = () => {
   );
 };
 
-export default KioskLoginScreen;
+export default AdminLoginScreen;
