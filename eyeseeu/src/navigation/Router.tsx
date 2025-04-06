@@ -1,21 +1,30 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 import AdminLoginScreen from '../screens/admin/AdminLoginScreen';
 import AdminHomeScreen from '../screens/admin/AdminHomeScreen';
-import { useAuth } from '../context/AuthContext';
+
+import KioskLoginScreen from '../screens/kiosk/KioskLoginScreen';
+import KioskHomeScreen from '../screens/kiosk/KioskHomeScreen';
 
 const Router = () => {
   const { isLoggedIn } = useAuth();
 
   return (
     <Routes>
-      {/* 관리자 로그인 */}
+      {/* 관리자 라우트 */}
       <Route path="/admin/login" element={<AdminLoginScreen />} />
-
-      {/* 관리자 홈 - 로그인 안 되어 있으면 로그인 페이지로 */}
       <Route
         path="/admin/home"
-        element={isLoggedIn ? <AdminHomeScreen /> : <Navigate to="/admin/login" replace />}
+        element={<AdminHomeScreen />}
+        // element={isLoggedIn ? <AdminHomeScreen /> : <Navigate to="/admin/login" replace />}
+      />
+
+      {/* 키오스크 라우트 */}
+      <Route path="/kiosk/login" element={<KioskLoginScreen />} />
+      <Route
+        path="/kiosk/home"
+        element={isLoggedIn ? <KioskHomeScreen /> : <Navigate to="/kiosk/login" replace />}
       />
 
       {/* 기본 경로 리디렉션 */}

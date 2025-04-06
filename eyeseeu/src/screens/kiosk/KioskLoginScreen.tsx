@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const AdminLoginScreen: React.FC = () => {
+const KioskLoginScreen: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -11,12 +11,12 @@ const AdminLoginScreen: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
+
     e.preventDefault();
-    navigate('/admin/home');
 
     if (email && password) {
-      login();
-      navigate('/admin/home');
+      // login();
+      // navigate('/admin/home');
     }
   };
 
@@ -29,7 +29,7 @@ const AdminLoginScreen: React.FC = () => {
             <span role="img" aria-label="eyes">👀</span>
             <span>Eye See You</span>
           </div>
-          <p className="text-text-secondary text-sm mt-2">여기는 관리자 페이지 입니다</p>
+          <p className="text-text-secondary text-sm mt-2">여기는 키오스크 페이지 입니다</p>
         </div>
 
         {/* 로그인 폼 */}
@@ -92,4 +92,4 @@ const AdminLoginScreen: React.FC = () => {
   );
 };
 
-export default AdminLoginScreen;
+export default KioskLoginScreen;

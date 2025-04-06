@@ -1,5 +1,5 @@
-import MenuCard from '../components/MenuCard'
-import { menuItems } from '../constants/menuItems'
+import MenuCard from '../../components/MenuCard'
+import { menuItems } from '../../constants/menuItems'
 
 export default function MenuScreen() {
   return (
