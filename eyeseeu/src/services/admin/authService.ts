@@ -6,10 +6,15 @@ interface RegisterPayload {
   storeName: string;
 }
 
+interface LoginResponse {
+  email: string;
+  storeName: string;
+}
+
 export const registerAdmin = (data: RegisterPayload) => {
-  return api.post('/admin/register', data);
+  return api.post('/user/signup', data);
 };
 
 export const loginAdmin = (email: string, password: string) => {
-  return api.post('/admin/login', { email, password });
+  return api.post<LoginResponse>('/admin/login', { email, password });
 };
