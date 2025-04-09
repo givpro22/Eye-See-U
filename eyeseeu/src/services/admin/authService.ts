@@ -16,5 +16,5 @@ export const registerAdmin = (data: RegisterPayload) => {
 };
 
 export const loginAdmin = (email: string, password: string) => {
-  return api.post<LoginResponse>('/admin/login', { email, password });
+  return api.post<LoginResponse>('/user/login', { email, password });
 };
