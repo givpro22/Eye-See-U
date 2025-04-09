@@ -6,6 +6,7 @@ import AdminHomeScreen from '../screens/admin/AdminHomeScreen';
 
 import KioskLoginScreen from '../screens/kiosk/KioskLoginScreen';
 import KioskHomeScreen from '../screens/kiosk/KioskHomeScreen';
+import AdminRegisterScreen from '../screens/admin/AdminRegisterScreen';
 
 const Router = () => {
   const { isLoggedIn } = useAuth();
@@ -18,6 +19,7 @@ const Router = () => {
         path="/admin/home"
         element={<AdminHomeScreen />}
       />
+      <Route path="/admin/register" element={<AdminRegisterScreen />} />
 
       {/* 키오스크 라우트 */}
       <Route path="/kiosk/login" element={<KioskLoginScreen />} />

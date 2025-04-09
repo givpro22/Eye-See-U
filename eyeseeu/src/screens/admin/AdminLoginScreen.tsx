@@ -45,11 +45,10 @@ const AdminLoginScreen: React.FC = () => {
         {/* 로그인 폼 */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block mb-1 text-sm font-semibold text-text-primary">아이디:</label>
+            <label className="block mb-1 text-sm font-semibold text-text-primary">이메일:</label>
             <input
               type="email"
               value={email}
-              disabled
               className="w-full px-4 py-2 bg-muted text-text-secondary rounded-md border border-border"
             />
           </div>
@@ -93,7 +92,10 @@ const AdminLoginScreen: React.FC = () => {
 
         <div className="mt-6 text-center text-sm text-text-secondary">
           계정이 없나요?{' '}
-          <a href="#" className="text-primary font-semibold hover:underline">
+          <a
+            onClick={() => navigate('/admin/register')}
+            className="text-primary font-semibold hover:underline cursor-pointer"
+          >
             계정 만들기
           </a>
         </div>
