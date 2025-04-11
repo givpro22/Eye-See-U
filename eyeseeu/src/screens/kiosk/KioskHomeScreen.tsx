@@ -21,7 +21,7 @@ const KioskHomeScreen = () => {
       </div>
 
       {/* 중간: 메뉴 선택 카드 */}
-      <div className="flex flex-col items-center gap-6 mt-10">
+      <div className="flex flex-col items-center gap-6 mt-10 w-full">
         <MenuCategoryCard
           label="전체메뉴"
           icon="/assets/icons/menu.svg"
