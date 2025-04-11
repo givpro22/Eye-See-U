@@ -26,7 +26,7 @@ const KioskHomeScreen = () => {
           label="전체메뉴"
           icon="/assets/icons/menu.svg"
           active
-          onClick={() => navigate('/menu/all')}
+          onClick={() => navigate('/kiosk/menu/all')}
         />
         <MenuCategoryCard
           label="인기메뉴"

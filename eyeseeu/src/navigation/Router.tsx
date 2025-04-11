@@ -8,6 +8,7 @@ import KioskHomeScreen from '../screens/kiosk/KioskHomeScreen';
 import AdminRegisterScreen from '../screens/admin/AdminRegisterScreen';
 import PrivateRoute from './PrivateRoute';
 import KioskLayout from '../screens/kiosk/KioskLayout';
+import MenuAllScreen from '../screens/kiosk/MenuAllScreen';
 
 const Router = () => {
 
@@ -30,6 +31,7 @@ const Router = () => {
       <Route path="/kiosk" element={<KioskLayout/>}>
         <Route path="home" element={<KioskHomeScreen />} />
         {/* 추후 추가될: 주문, 장바구니 등도 여기에 */}
+        <Route path="menu/all" element={<MenuAllScreen/>} />
         {/* <Route path="cart" element={<CartScreen />} /> */}
       </Route>
 
