@@ -1,65 +1,35 @@
-// src/webcam/WebcamManager.tsx
 import React, { useEffect, useRef } from 'react';
-import { getFaceLandmarker } from '../mediapipe/faceLandmarker';
+import { initializeFaceMesh } from '../mediapipe/faceLandmarker';
+import { cropRegionsFromLandmarks } from '../processors/cropEyeRegions';
+import { runAffNet } from '../models/runAffNet';
 
-const WebcamManager: React.FC = () => {
+type Props = {
+  onGazeUpdate?: (gaze: { x: number; y: number }) => void;
+};
+
+const WebcamManager: React.FC<Props> = ({ onGazeUpdate }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    let stream: MediaStream;
-    let animationFrameId: number;
+    if (!videoRef.current) return;
 
-    const startCamera = async () => {
+    initializeFaceMesh(videoRef.current, async (landmarks) => {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
-          audio: false,
-        });
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-        }
-
-        const faceLandmarker = await getFaceLandmarker();
-
-        const processFrame = async () => {
-          if (!videoRef.current) return;
-
-          const results = await faceLandmarker.detectForVideo(
-            videoRef.current,
-            performance.now()
-          );
-
-          if (results.faceLandmarks && results.faceLandmarks.length > 0) {
-            console.log('얼굴 랜드마크:', results.faceLandmarks[0]);
-          }
-
-          animationFrameId = requestAnimationFrame(processFrame);
-        };
-
-        animationFrameId = requestAnimationFrame(processFrame);
+        const { leftEye, rightEye, face, rects } = cropRegionsFromLandmarks(videoRef.current!, landmarks);
+        const gaze = await runAffNet(leftEye, rightEye, face, rects);
+        onGazeUpdate?.(gaze);
       } catch (err) {
-        console.error('웹캠/MediaPipe 오류:', err);
+        console.warn('시선 추정 실패:', err);
       }
-    };
-
-    startCamera();
+    });
 
     return () => {
-      if (stream) stream.getTracks().forEach((track) => track.stop());
-      cancelAnimationFrame(animationFrameId);
+      const stream = videoRef.current?.srcObject as MediaStream;
+      stream?.getTracks().forEach((track) => track.stop());
     };
   }, []);
 
-  return (
-    <video
-      ref={videoRef}
-      className="hidden"
-      muted
-      playsInline
-    />
-  );
+  return <video ref={videoRef} className="hidden" autoPlay muted playsInline />;
 };
 
 export default WebcamManager;
