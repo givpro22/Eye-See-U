@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import ProductCard from '../../components/admin/product/ProductCard';
-import { fetchAdminProducts, AdminProduct } from '../../services/admin/productService';
 import AddProductModal from '../../components/admin/product/AddProductModal';
+import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
+import { fetchAdminProducts, AdminProduct } from '../../services/admin/productService';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<AdminProduct[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -20,15 +22,23 @@ const ProductListScreen = () => {
   };
 
   return (
-    <div>
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">제품 목록</h2>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-primary px-5 py-2 rounded-xl text-white text-sm font-semibold shadow hover:brightness-110 transition"
-        >
-          상품 추가하기
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setIsCategoryModalOpen(true)}
+            className="border border-gray-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-100"
+          >
+            카테고리 관리
+          </button>
+          <button
+            onClick={() => setIsProductModalOpen(true)}
+            className="bg-primary px-5 py-2 rounded-xl text-white text-sm font-semibold shadow hover:brightness-110 transition"
+          >
+            상품 추가하기
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -43,8 +53,20 @@ const ProductListScreen = () => {
         ))}
       </div>
 
-      {isModalOpen && (
-        <AddProductModal onClose={() => setIsModalOpen(false)} onCreated={handleAddProduct} />
+      {/* 상품 추가 모달 */}
+      {isProductModalOpen && (
+        <AddProductModal
+          onClose={() => setIsProductModalOpen(false)}
+          onCreated={handleAddProduct}
+        />
+      )}
+
+      {/* 카테고리 관리 모달 */}
+      {isCategoryModalOpen && (
+        <CategoryManagerModal
+          open={isCategoryModalOpen}
+          onClose={() => setIsCategoryModalOpen(false)}
+        />
       )}
     </div>
   );
