@@ -10,5 +10,9 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
+  assetsInclude: ["**/*.onnx"],
+  optimizeDeps: {
+    exclude: ["onnxruntime-web"],
+  },
  
 });
