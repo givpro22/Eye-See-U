@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import ProductCard from '../../components/admin/product/ProductCard';
 import AddProductModal from '../../components/admin/product/AddProductModal';
 import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
+import OptionManagerModal from '../../components/admin/option/OptionManagerModal';
 import { fetchAdminProducts, AdminProduct } from '../../services/admin/productService';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -31,6 +33,12 @@ const ProductListScreen = () => {
             className="border border-gray-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-100"
           >
             카테고리 관리
+          </button>
+          <button
+            onClick={() => setIsOptionModalOpen(true)}
+            className="border border-gray-400 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-100"
+          >
+            옵션 관리
           </button>
           <button
             onClick={() => setIsProductModalOpen(true)}
@@ -66,6 +74,13 @@ const ProductListScreen = () => {
         <CategoryManagerModal
           open={isCategoryModalOpen}
           onClose={() => setIsCategoryModalOpen(false)}
+        />
+      )}
+      {/* 옵션 관리 모달 */}
+      {isOptionModalOpen && (
+        <OptionManagerModal
+          open={isOptionModalOpen}
+          onClose={() => setIsOptionModalOpen(false)}
         />
       )}
     </div>

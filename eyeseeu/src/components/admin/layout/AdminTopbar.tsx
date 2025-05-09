@@ -3,7 +3,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const AdminTopbar = () => {
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="h-16 px-6 bg-white border-b border-gray-200 flex items-center justify-between">
@@ -36,6 +36,12 @@ const AdminTopbar = () => {
           <div className="text-right text-sm leading-tight">
             <p className="font-semibold text-text-primary">{user?.email}</p>
             <p className="text-text-secondary text-xs">{user?.storeName}</p>
+            <button
+              onClick={logout}
+              className="ml-2 px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"
+            >
+              로그아웃
+            </button>
           </div>
         </div>
       </div>
