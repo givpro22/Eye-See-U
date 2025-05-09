@@ -1,6 +1,10 @@
 import { FaBell } from "react-icons/fa";
+import { useAuth } from "../../../hooks/useAuth";
 
 const AdminTopbar = () => {
+
+  const { user } = useAuth();
+
   return (
     <div className="h-16 px-6 bg-white border-b border-gray-200 flex items-center justify-between">
       {/* 검색창 */}
@@ -30,8 +34,8 @@ const AdminTopbar = () => {
             className="w-9 h-9 rounded-full object-cover"
           />
           <div className="text-right text-sm leading-tight">
-            <p className="font-semibold text-text-primary">햄버거 집</p>
-            <p className="text-text-secondary text-xs">관리자</p>
+            <p className="font-semibold text-text-primary">{user?.email}</p>
+            <p className="text-text-secondary text-xs">{user?.storeName}</p>
           </div>
         </div>
       </div>

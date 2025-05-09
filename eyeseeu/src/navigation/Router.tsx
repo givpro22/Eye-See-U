@@ -15,6 +15,7 @@ const Router = () => {
   return (
     <Routes>
       {/* 관리자 라우트 */}
+      <Route path="/admin/register" element={<AdminRegisterScreen />} />
       <Route path="/admin/login" element={<AdminLoginScreen />} />
       <Route
         path="/admin/home"
@@ -23,7 +24,11 @@ const Router = () => {
           <AdminHomeScreen />
         </PrivateRoute>}
       />
-      <Route path="/admin/register" element={<AdminRegisterScreen />} />
+
+
+
+
+
 
       {/* 키오스크 라우트 */}
       <Route path="/kiosk/login" element={<KioskLoginScreen />} />

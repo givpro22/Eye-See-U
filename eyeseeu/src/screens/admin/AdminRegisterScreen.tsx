@@ -8,6 +8,7 @@ const AdminRegisterScreen: React.FC = () => {
 
   const [email, setEmail] = useState('admin@email.com');
   const [password, setPassword] = useState('qlalfqjsgh1!');
+  const [name, setName] = useState('');
   const [storeName, setStoreName] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +17,7 @@ const AdminRegisterScreen: React.FC = () => {
     setError(null); // 기존 에러 초기화
 
     try {
-      await registerAdmin({ email, password, storeName });
+      await registerAdmin({ email, password, storeName, name });
       alert('회원가입이 완료되었습니다!');
       navigate('/admin/login');
     } catch (err) {
@@ -68,6 +69,17 @@ const AdminRegisterScreen: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 bg-muted text-text-primary rounded-md border border-border"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-semibold text-text-primary">이름</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="예: admin"
               className="w-full px-4 py-2 bg-muted text-text-primary rounded-md border border-border"
             />
           </div>

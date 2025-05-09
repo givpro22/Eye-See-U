@@ -4,6 +4,7 @@ interface RegisterPayload {
   email: string;
   password: string;
   storeName: string;
+  name: string;
 }
 
 interface LoginResponse {
@@ -18,3 +19,4 @@ export const registerAdmin = (data: RegisterPayload) => {
 export const loginAdmin = (email: string, password: string) => {
   return api.post<LoginResponse>('/user/login', { email, password });
 };
+
