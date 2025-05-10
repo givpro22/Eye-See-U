@@ -1,5 +1,5 @@
 import * as ort from 'onnxruntime-web';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
 
@@ -28,6 +28,7 @@ const getBoundingBox = (landmarks: any[], indexes: number[], width: number, heig
 const WebcamManager = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [gazeResult, setGazeResult] = useState<number[] | null>(null);
 
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -106,7 +107,6 @@ const WebcamManager = () => {
             normX * normY, normX * normW, normY * normH, normW * normH
           ];
           // Log 12-dim face grid
-          console.log("faceGrid:", faceGrid);
 
           // === ONNX inference ===
           // Helper to extract region from video
@@ -147,6 +147,9 @@ const WebcamManager = () => {
           };
 
           const leftEyeImg = extractRegion(leftEyeBox);
+          if (!leftEyeImg || leftEyeImg.width === 0 || leftEyeImg.height === 0) {
+            console.error("❌ leftEyeImg is invalid", leftEyeImg);
+          }
           const rightEyeImg = extractRegion(rightEyeBox);
           const faceImg = extractRegion(faceBox);
 
@@ -155,15 +158,16 @@ const WebcamManager = () => {
           const faceImgTensor = new ort.Tensor('float32', preprocess(faceImg, 224, 224), [1, 3, 224, 224]);
           const faceGridTensor = new ort.Tensor('float32', new Float32Array(faceGrid), [1, 12]);
 
-          ort.InferenceSession.create('affnet.onnx').then(session => {
+          ort.InferenceSession.create('/affnet.onnx').then(session => {
             session.run({
-              left_eye: leftEyeTensor,
-              right_eye: rightEyeTensor,
-              face_img: faceImgTensor,
-              face_grid: faceGridTensor
+              leftEyeImg: leftEyeTensor,
+              rightEyeImg: rightEyeTensor,
+              faceImg: faceImgTensor,
+              rects: faceGridTensor
             }).then(output => {
               const gaze = output.gaze.data;
               console.log('Predicted gaze:', gaze);
+              setGazeResult(gaze);
             });
           });
         }
@@ -212,6 +216,11 @@ const WebcamManager = () => {
           ref={canvasRef}
           className="absolute top-0 left-0 w-full h-full pointer-events-none"
         />
+        {gazeResult && (
+          <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+            Gaze: [{gazeResult[0].toFixed(3)}, {gazeResult[1].toFixed(3)}]
+          </div>
+        )}
       </div>
     </div>
   );
