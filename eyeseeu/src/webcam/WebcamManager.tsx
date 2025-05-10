@@ -2,6 +2,7 @@ import * as ort from 'onnxruntime-web';
 import { useEffect, useRef, useState } from 'react';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
+import { useGaze } from '../contexts/GazeContext';
 
 
 
@@ -28,7 +29,7 @@ const getBoundingBox = (landmarks: any[], indexes: number[], width: number, heig
 const WebcamManager = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [gazeResult, setGazeResult] = useState<number[] | null>(null);
+  const { gazeResult, setGazeResult } = useGaze();
 
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return;
