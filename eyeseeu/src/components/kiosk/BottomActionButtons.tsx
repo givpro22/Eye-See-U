@@ -1,5 +1,4 @@
 // components/kiosk/BottomActionButtons.tsx
-import React from 'react';
 
 const BottomActionButtons = () => {
   return (

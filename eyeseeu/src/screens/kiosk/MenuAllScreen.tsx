@@ -4,19 +4,19 @@ import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
 
-  useEffect(() => {
-    const loadMenus = async () => {
-      try {
-        const data = await fetchAllMenus();
-        const availableMenus = data.filter((item) => item.state === 'AVAILABLE');
-        setMenus(availableMenus);
-      } catch (error) {
-        console.error('메뉴 불러오기 실패:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const loadMenus = async () => {
+  //     try {
+  //       const data = await fetchAllMenus();
+  //       const availableMenus = data.filter((item) => item.state === 'AVAILABLE');
+  //       setMenus(availableMenus);
+  //     } catch (error) {
+  //       console.error('메뉴 불러오기 실패:', error);
+  //     }
+  //   };
 
-    loadMenus();
-  }, []);
+  //   loadMenus();
+  // }, []);
 
   return (
     <div className="grid grid-cols-2 gap-4 px-2">

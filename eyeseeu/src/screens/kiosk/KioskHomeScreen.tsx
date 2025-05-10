@@ -47,21 +47,18 @@ const KioskHomeScreen = () => {
       <div className="flex flex-col items-center gap-6 mt-10 w-full">
         <MenuCategoryCard
           label="전체메뉴"
-          icon="/assets/icons/menu.svg"
+          icon="menu"
           active
           onClick={() => navigate('/kiosk/menu/all')}
         />
         <MenuCategoryCard
           label="인기메뉴"
-          icon="/assets/icons/popular.svg"
+          icon="popular"
           onClick={() => navigate('/menu/popular')}
         />
       </div>
 
-      {/* 하단 버튼 */}
-      <div className="mt-auto mb-4">
-        <BottomActionButtons />
-      </div>
+
       {cursorPos && (
         <div
           className="absolute z-50 w-6 h-6 bg-red-500 rounded-full opacity-70 pointer-events-none"

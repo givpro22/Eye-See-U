@@ -31,6 +31,14 @@ const WebcamManager = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { gazeResult, setGazeResult } = useGaze();
 
+  const sessionRef = useRef<ort.InferenceSession | null>(null);
+
+  useEffect(() => {
+    ort.InferenceSession.create('/affnet.onnx').then(session => {
+      sessionRef.current = session;
+    });
+  }, []);
+
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return;
 
@@ -159,18 +167,18 @@ const WebcamManager = () => {
           const faceImgTensor = new ort.Tensor('float32', preprocess(faceImg, 224, 224), [1, 3, 224, 224]);
           const faceGridTensor = new ort.Tensor('float32', new Float32Array(faceGrid), [1, 12]);
 
-          ort.InferenceSession.create('/affnet.onnx').then(session => {
-            session.run({
+          if (sessionRef.current) {
+            sessionRef.current.run({
               leftEyeImg: leftEyeTensor,
               rightEyeImg: rightEyeTensor,
               faceImg: faceImgTensor,
               rects: faceGridTensor
             }).then(output => {
               const gaze = output.gaze.data;
-              console.log('Predicted gaze:', gaze);
+              // console.log('Predicted gaze:', gaze);
               setGazeResult(gaze);
             });
-          });
+          }
         }
       }
 
