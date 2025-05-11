@@ -58,24 +58,6 @@ const KioskHomeScreen = () => {
         />
       </div>
 
-
-      {cursorPos && (
-        <div
-          className="absolute z-50 w-6 h-6 bg-red-500 rounded-full opacity-70 pointer-events-none"
-          style={{
-            left: `${cursorPos.x}px`,
-            top: `${cursorPos.y}px`,
-            transform: 'translate(-50%, -50%)',
-            position: 'fixed',
-          }}
-        />
-      )}
-      {gazeResult && (
-        <div className="fixed bottom-4 left-4 bg-black text-white text-sm px-4 py-2 rounded z-50">
-          보정된 시선: X {(Math.max(0, Math.min(1, gazeResult[0]))).toFixed(3)}, 
-          Y {(Math.max(0, Math.min(1, (gazeResult[1] + 8) / 8))).toFixed(3)}
-        </div>
-      )}
            {/* 하단 버튼 */}
            <div className="mt-auto mb-4">
         <BottomActionButtons />

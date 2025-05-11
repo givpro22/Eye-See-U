@@ -105,15 +105,26 @@ const WebcamManager = () => {
           canvasCtx.strokeStyle = 'orange';
           canvasCtx.strokeRect(faceBox.x, faceBox.y, faceBox.width, faceBox.height);
 
-          // Face grid: [x, y, w, h] normalized
-          const normX = faceBox.x / width;
-          const normY = faceBox.y / height;
-          const normW = faceBox.width / width;
-          const normH = faceBox.height / height;
-          const faceGrid = [
-            normX, normY, normW, normH,
-            normX * normX, normY * normY, normW * normW, normH * normH,
-            normX * normY, normX * normW, normY * normH, normW * normH
+          // rects: [faceW, faceH, faceX, faceY, leftW, leftH, leftX, leftY, rightW, rightH, rightX, rightY]
+          const leftX = leftEyeBox.x / width;
+          const leftY = leftEyeBox.y / height;
+          const leftW = leftEyeBox.width / width;
+          const leftH = leftEyeBox.height / height;
+
+          const rightX = rightEyeBox.x / width;
+          const rightY = rightEyeBox.y / height;
+          const rightW = rightEyeBox.width / width;
+          const rightH = rightEyeBox.height / height;
+
+          const faceX = faceBox.x / width;
+          const faceY = faceBox.y / height;
+          const faceW = faceBox.width / width;
+          const faceH = faceBox.height / height;
+
+          const rects = [
+            faceW, faceH, faceX, faceY,
+            leftW, leftH, leftX, leftY,
+            rightW, rightH, rightX, rightY
           ];
           // Log 12-dim face grid
 
@@ -160,19 +171,35 @@ const WebcamManager = () => {
             console.error("❌ leftEyeImg is invalid", leftEyeImg);
           }
           const rightEyeImg = extractRegion(rightEyeBox);
+          // Flip right eye image horizontally
+          const flipImageDataHorizontally = (imageData: ImageData): ImageData => {
+            const { width, height, data } = imageData;
+            const flipped = new Uint8ClampedArray(data.length);
+            for (let y = 0; y < height; y++) {
+              for (let x = 0; x < width; x++) {
+                const srcIndex = (y * width + x) * 4;
+                const dstIndex = (y * width + (width - 1 - x)) * 4;
+                for (let i = 0; i < 4; i++) {
+                  flipped[dstIndex + i] = data[srcIndex + i];
+                }
+              }
+            }
+            return new ImageData(flipped, width, height);
+          };
+          const flippedRightEyeImg = flipImageDataHorizontally(rightEyeImg);
           const faceImg = extractRegion(faceBox);
 
           const leftEyeTensor = new ort.Tensor('float32', preprocess(leftEyeImg, 112, 112), [1, 3, 112, 112]);
-          const rightEyeTensor = new ort.Tensor('float32', preprocess(rightEyeImg, 112, 112), [1, 3, 112, 112]);
+          const rightEyeTensor = new ort.Tensor('float32', preprocess(flippedRightEyeImg, 112, 112), [1, 3, 112, 112]);
           const faceImgTensor = new ort.Tensor('float32', preprocess(faceImg, 224, 224), [1, 3, 224, 224]);
-          const faceGridTensor = new ort.Tensor('float32', new Float32Array(faceGrid), [1, 12]);
+          const rectsTensor = new ort.Tensor('float32', new Float32Array(rects), [1, 12]);
 
           if (sessionRef.current) {
             sessionRef.current.run({
               leftEyeImg: leftEyeTensor,
               rightEyeImg: rightEyeTensor,
               faceImg: faceImgTensor,
-              rects: faceGridTensor
+              rects: rectsTensor
             }).then(output => {
               const gaze = output.gaze.data;
               // console.log('Predicted gaze:', gaze);
