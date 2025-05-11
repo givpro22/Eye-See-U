@@ -76,7 +76,12 @@ const KioskHomeScreen = () => {
           Y {(Math.max(0, Math.min(1, (gazeResult[1] + 8) / 8))).toFixed(3)}
         </div>
       )}
+           {/* 하단 버튼 */}
+           <div className="mt-auto mb-4">
+        <BottomActionButtons />
+      </div>
     </div>
+    
   );
 };
 
