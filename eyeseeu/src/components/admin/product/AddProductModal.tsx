@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchCategories } from '../../../services/admin/categoryService';
+import { fetchOptionGroups, OptionGroupResponse } from '../../../services/admin/optionService';
 import { AdminProduct, createProduct, NewProductPayload } from '../../../services/admin/productService';
 
 interface AddProductModalProps {
@@ -7,12 +9,8 @@ interface AddProductModalProps {
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated }) => {
-  // ✅ 카테고리 하드코딩
-  const categoryOptions = [
-    { id: 1, name: '버거' },
-    { id: 2, name: '사이드메뉴' },
-    { id: 3, name: '음료' },
-  ];
+  const [categoryOptions, setCategoryOptions] = useState<{ id: number; name: string }[]>([]);
+  const [optionGroups, setOptionGroups] = useState<OptionGroupResponse[]>([]);
 
   const [form, setForm] = useState<NewProductPayload>({
     categoryId: 1,
@@ -22,6 +20,22 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
     state: 'AVAILABLE',
     picture: '',
   });
+
+  const [selectedOptionId, setSelectedOptionId] = useState<number>(optionGroups[0]?.id ?? 0);
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const categories = await fetchCategories();
+        setCategoryOptions(categories.data); // categories is axios response
+        const options = await fetchOptionGroups();
+        setOptionGroups(options);
+      } catch (err) {
+        console.error('초기 데이터 로딩 실패:', err);
+      }
+    };
+    loadInitialData();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -35,8 +49,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
     try {
       const payload = { ...form };
       if (!payload.picture?.trim()) {
-        delete payload.picture; // 빈 문자열일 경우 필드 제거
+        delete payload.picture;
       }
+      // You can modify payload to include selectedOptionIds if your API accepts it
 
       const created = await createProduct(payload);
       onCreated(created);
@@ -64,20 +79,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
           onChange={handleChange}
           className="border px-3 py-2 rounded mb-2 w-full"
         />
-
-        <select
-          name="categoryId"
-          value={form.categoryId}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded mb-2 w-full"
-        >
-          {categoryOptions.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
         <input
           name="price"
           type="number"
@@ -91,8 +92,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
           onChange={handleChange}
           className="border px-3 py-2 rounded mb-2 w-full"
         />
-
-        <select
+       <select
           name="state"
           value={form.state}
           onChange={handleChange}
@@ -102,6 +102,35 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
           <option value="OUT_OF_STOCK">품절</option>
           <option value="HIDDEN">숨김</option>
         </select>
+        
+        <div className="font-semibold text-sm text-gray-700 mb-1">카테고리 선택</div>
+        <select
+          name="categoryId"
+          value={form.categoryId}
+          onChange={handleChange}
+          className="border px-3 py-2 rounded mb-2 w-full"
+        >
+          {categoryOptions.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+
+        <div className="font-semibold text-sm text-gray-700 mb-1">옵션 그룹 선택</div>
+        <select
+          value={selectedOptionId}
+          onChange={(e) => setSelectedOptionId(Number(e.target.value))}
+          className="border px-3 py-2 rounded mb-2 w-full"
+        >
+          {optionGroups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+
+ 
 
         <div className="flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded-md">

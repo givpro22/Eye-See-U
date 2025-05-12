@@ -64,9 +64,10 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
           <button onClick={onClose} className="text-gray-500">✕</button>
         </div>
 
+        <h3 className="text-md font-semibold mb-2 mt-4">기존 옵션 그룹 목록</h3>
         <div className="space-y-2">
           {optionGroups.map(group => (
-            <div key={group.id} className="border p-2 rounded">
+            <div key={group.id} className="bg-gray-50 border p-3 rounded">
               {editGroupId === group.id ? (
                 <>
                   <label className="text-sm font-medium">옵션 그룹 이름</label>
@@ -77,7 +78,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                       setEditGroup(prev => prev ? { ...prev, name: e.target.value } : null)
                     }
                   />
-                  <p className="text-xs text-gray-500 mb-2">예: 토핑, 사이즈 등 옵션을 묶는 이름입니다.</p>
 
                   <div className="flex gap-2 mb-2">
                     <div className="w-1/2">
@@ -91,7 +91,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                           setEditGroup(prev => prev ? { ...prev, minCount: Number(e.target.value) } : null)
                         }
                       />
-                      <p className="text-xs text-gray-500 mb-2">이 그룹에서 사용자가 반드시 선택해야 하는 최소 옵션 수입니다.</p>
                     </div>
                     <div className="w-1/2">
                       <label className="text-sm font-medium">최대 선택 수</label>
@@ -104,7 +103,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                           setEditGroup(prev => prev ? { ...prev, maxCount: Number(e.target.value) } : null)
                         }
                       />
-                      <p className="text-xs text-gray-500 mb-2">이 그룹에서 사용자가 선택할 수 있는 최대 옵션 수입니다.</p>
                     </div>
                   </div>
                   {editGroup?.options.map((opt, index) => (
@@ -124,7 +122,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                             })
                           }
                         />
-                        <p className="text-xs text-gray-500 mb-2">예: '치즈', '베이컨' 등 개별 항목 이름입니다.</p>
                       </div>
                       <div className="w-1/3">
                         <label className="text-sm font-medium">가격</label>
@@ -142,7 +139,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                             })
                           }
                         />
-                        <p className="text-xs text-gray-500 mb-2">해당 옵션을 선택했을 때 추가되는 금액입니다.</p>
                       </div>
                       <div className="w-1/3">
                         <label className="text-sm font-medium">사진 URL (선택)</label>
@@ -159,11 +155,10 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                             })
                           }
                         />
-                        <p className="text-xs text-gray-500 mb-2">선택 항목에 표시될 이미지 링크입니다. 비워도 됩니다.</p>
                       </div>
                     </div>
                   ))}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mt-2">
                     <button className="bg-blue-500 text-white px-2 py-1" onClick={() => handleUpdate(group.id)}>저장</button>
                     <button className="border px-2 py-1" onClick={() => setEditGroupId(null)}>취소</button>
                   </div>
@@ -172,7 +167,7 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                 <>
                   <div className="font-semibold">{group.name}</div>
                   <div className="text-sm text-gray-500">옵션 수: {group.options.length}</div>
-                  <div className="flex gap-2 mt-1">
+                  <div className="flex gap-2 mt-2">
                     <button className="text-blue-600" onClick={() => {
                       setEditGroupId(group.id);
                       setEditGroup({
@@ -190,8 +185,9 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
           ))}
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-md font-semibold mb-2">새 옵션 그룹 추가</h3>
+        <hr className="my-4" />
+        <h3 className="text-md font-semibold mb-2">새 옵션 그룹 추가</h3>
+        <div className="mt-4">
           <label className="text-sm font-medium">옵션 그룹 이름</label>
           <input
             className="border px-2 py-1 w-full mb-2"
@@ -199,7 +195,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
             value={newGroup.name}
             onChange={(e) => setNewGroup(prev => ({ ...prev, name: e.target.value }))}
           />
-          <p className="text-xs text-gray-500 mb-2">예: 토핑, 사이즈 등 옵션을 묶는 이름입니다.</p>
           <div className="flex gap-2 mb-2">
             <div className="w-full">
               <label className="text-sm font-medium">최소 선택 수</label>
@@ -210,7 +205,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                 value={newGroup.minCount}
                 onChange={(e) => setNewGroup(prev => ({ ...prev, minCount: Number(e.target.value) }))}
               />
-              <p className="text-xs text-gray-500 mb-2">이 그룹에서 사용자가 반드시 선택해야 하는 최소 옵션 수입니다.</p>
             </div>
             <div className="w-full">
               <label className="text-sm font-medium">최대 선택 수</label>
@@ -221,7 +215,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                 value={newGroup.maxCount}
                 onChange={(e) => setNewGroup(prev => ({ ...prev, maxCount: Number(e.target.value) }))}
               />
-              <p className="text-xs text-gray-500 mb-2">이 그룹에서 사용자가 선택할 수 있는 최대 옵션 수입니다.</p>
             </div>
           </div>
           {newGroup.options.map((opt, index) => (
@@ -240,7 +233,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                     })
                   }
                 />
-                <p className="text-xs text-gray-500 mb-2">예: '치즈', '베이컨' 등 개별 항목 이름입니다.</p>
               </div>
               <div className="w-1/3">
                 <label className="text-sm font-medium">가격</label>
@@ -257,7 +249,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                     })
                   }
                 />
-                <p className="text-xs text-gray-500 mb-2">해당 옵션을 선택했을 때 추가되는 금액입니다.</p>
               </div>
               <div className="w-1/3">
                 <label className="text-sm font-medium">사진 URL (선택)</label>
@@ -273,7 +264,6 @@ const OptionManagerModal = ({ open, onClose }: Props) => {
                     })
                   }
                 />
-                <p className="text-xs text-gray-500 mb-2">선택 항목에 표시될 이미지 링크입니다. 비워도 됩니다.</p>
               </div>
               <button
                 className="text-red-600 text-sm"
