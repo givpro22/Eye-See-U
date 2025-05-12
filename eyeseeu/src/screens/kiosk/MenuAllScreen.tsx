@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react';
 import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
+import { mockProducts } from '../../mock/products';
 
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
 
-  useEffect(() => {
-    const loadMenus = async () => {
-      try {
-        const data = await fetchAllMenus();
-        const availableMenus = data.filter((item) => item.state === 'AVAILABLE');
-        setMenus(availableMenus);
-      } catch (error) {
-        console.error('메뉴 불러오기 실패:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const loadMenus = async () => {
+  //     try {
+  //       const data = await fetchAllMenus();
+  //       const availableMenus = data.filter((item) => item.state === 'AVAILABLE');
+  //       setMenus(availableMenus);
+  //     } catch (error) {
+  //       console.error('메뉴 불러오기 실패:', error);
+  //     }
+  //   };
 
-    loadMenus();
-  }, []);
+  //   loadMenus();
+  // }, []);
+
+   useEffect(() => {
+      setMenus(mockProducts);
+    }, []);
+
 
   return (
     <div className="relative w-full h-full px-4 py-2 bg-white">

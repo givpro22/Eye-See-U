@@ -3,7 +3,8 @@ import ProductCard from '../../components/admin/product/ProductCard';
 import AddProductModal from '../../components/admin/product/AddProductModal';
 import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
 import OptionManagerModal from '../../components/admin/option/OptionManagerModal';
-import { fetchAdminProducts, AdminProduct } from '../../services/admin/productService';
+import { AdminProduct } from '../../services/admin/productService';
+import { mockProducts } from '../../mock/products';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<AdminProduct[]>([]);
@@ -11,12 +12,21 @@ const ProductListScreen = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
 
+
+   // useEffect(() => {
+  //   const loadProducts = async () => {
+  //     const data = await fetchAdminProducts();
+  //     setProducts(data);
+  //   };
+  //   loadProducts();
+  // }, []);
+
+  // const handleAddProduct = (product: AdminProduct) => {
+  //   setProducts((prev) => [...prev, product]);
+  // };
+
   useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchAdminProducts();
-      setProducts(data);
-    };
-    loadProducts();
+    setProducts(mockProducts);
   }, []);
 
   const handleAddProduct = (product: AdminProduct) => {
