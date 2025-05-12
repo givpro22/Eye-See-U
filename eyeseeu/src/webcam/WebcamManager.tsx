@@ -189,6 +189,22 @@ const WebcamManager = () => {
           const flippedRightEyeImg = flipImageDataHorizontally(rightEyeImg);
           const faceImg = extractRegion(faceBox);
 
+          const drawPreview = (id: string, imageData: ImageData) => {
+            const previewCanvas = document.getElementById(id) as HTMLCanvasElement;
+            if (previewCanvas) {
+              const ctx = previewCanvas.getContext("2d");
+              if (ctx) {
+                previewCanvas.width = imageData.width;
+                previewCanvas.height = imageData.height;
+                ctx.putImageData(imageData, 0, 0);
+              }
+            }
+          };
+
+          drawPreview("leftEyePreview", leftEyeImg);
+          drawPreview("rightEyePreview", flippedRightEyeImg);
+          drawPreview("facePreview", faceImg);
+
           const leftEyeTensor = new ort.Tensor('float32', preprocess(leftEyeImg, 112, 112), [1, 3, 112, 112]);
           const rightEyeTensor = new ort.Tensor('float32', preprocess(flippedRightEyeImg, 112, 112), [1, 3, 112, 112]);
           const faceImgTensor = new ort.Tensor('float32', preprocess(faceImg, 224, 224), [1, 3, 224, 224]);
@@ -202,7 +218,7 @@ const WebcamManager = () => {
               rects: rectsTensor
             }).then(output => {
               const gaze = output.gaze.data;
-              // console.log('Predicted gaze:', gaze);
+              console.log('Predicted gaze:', gaze);
               setGazeResult(gaze);
             });
           }
@@ -257,6 +273,28 @@ const WebcamManager = () => {
             Gaze: [{gazeResult[0].toFixed(3)}, {gazeResult[1].toFixed(3)}]
           </div>
         )}
+      </div>
+      <div className="flex flex-col items-center space-y-1 mt-2">
+        <div className="flex space-x-2">
+          <canvas
+            id="leftEyePreview"
+            width="56"
+            height="56"
+            className="border border-blue-500"
+          />
+          <canvas
+            id="rightEyePreview"
+            width="56"
+            height="56"
+            className="border border-red-500"
+          />
+        </div>
+        <canvas
+          id="facePreview"
+          width="112"
+          height="112"
+          className="border border-orange-500"
+        />
       </div>
     </div>
   );
