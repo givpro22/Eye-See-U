@@ -32,6 +32,7 @@ const WebcamManager = () => {
   const { gazeResult, setGazeResult } = useGaze();
 
   const sessionRef = useRef<ort.InferenceSession | null>(null);
+  const lastUpdateTime = useRef<number>(0);
 
   useEffect(() => {
     ort.InferenceSession.create('/affnet.onnx').then(session => {
@@ -219,7 +220,11 @@ const WebcamManager = () => {
             }).then(output => {
               const gaze = output.gaze.data;
               console.log('Predicted gaze:', gaze);
-              setGazeResult(gaze);
+              const now = Date.now();
+              if (now - lastUpdateTime.current > 1) {
+                lastUpdateTime.current = now;
+                setGazeResult(gaze);
+              }
             });
           }
         }

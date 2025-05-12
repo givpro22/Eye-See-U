@@ -46,12 +46,12 @@ function WebcamOverlay() {
           }}
         />
       )}
-      {/* {gazeResult && (
+      {gazeResult && (
         <div className="fixed bottom-4 left-4 bg-black text-white text-sm px-4 py-2 rounded z-50">
           보정된 시선: X {((gazeResult[0] + 4.33) / 1.6).toFixed(3)}, 
           Y {((0.4 - gazeResult[1]) / 0.8).toFixed(3)}
         </div>
-      )} */}
+      )}
     </>
   );
 }
