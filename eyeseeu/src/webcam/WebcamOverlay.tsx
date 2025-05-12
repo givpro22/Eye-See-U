@@ -12,16 +12,14 @@ function WebcamOverlay() {
 
     const [gx, gy] = gazeResult;
 
-    const screenW = window.innerWidth;
-    const screenH = window.innerHeight;
+    const normalizedX = (gx + 4.33) / 0.65;
+    const normalizedY = (gy + 0.4) / 0.65;
 
-    const normalizedX = Math.max(0, Math.min(1, gx));
-    const normalizedY = Math.max(0, Math.min(1, (gy + 8) / 8));
-
-    const x = normalizedX * screenW;
-    const y = normalizedY * screenH;
-
-    setCursorPos({ x, y });
+    const x = normalizedX * 1000;
+    const y = normalizedY * 500;
+    const clampedX = Math.min(Math.max(x, 0), window.innerWidth);
+    const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
+    setCursorPos({ x: clampedX, y: clampedY });
   }, [gazeResult]);
 
   return (
@@ -50,8 +48,8 @@ function WebcamOverlay() {
       )}
       {gazeResult && (
         <div className="fixed bottom-4 left-4 bg-black text-white text-sm px-4 py-2 rounded z-50">
-          보정된 시선: X {(Math.max(0, Math.min(1, gazeResult[0]))).toFixed(3)}, 
-          Y {(Math.max(0, Math.min(1, (gazeResult[1] + 8) / 8))).toFixed(3)}
+          보정된 시선: X {((gazeResult[0] + 4.33) / 1.6).toFixed(3)}, 
+          Y {((0.4 - gazeResult[1]) / 0.8).toFixed(3)}
         </div>
       )}
     </>
