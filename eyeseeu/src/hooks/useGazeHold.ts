@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react';
 
-type UseGazeHoldProps = {
-  targetRef: React.RefObject<HTMLElement>;
+type UseGazeHoldProps<T extends HTMLElement = HTMLElement> = {
+  targetRef: React.RefObject<T>;
   gazePos: { x: number; y: number } | null;
   holdTimeMs?: number;
   onHoldComplete: () => void;
 };
 
-export function useGazeHold({
+export function useGazeHold<T extends HTMLElement = HTMLElement>({
   targetRef,
   gazePos,
   holdTimeMs = 3000,
   onHoldComplete,
-}: UseGazeHoldProps) {
+}: UseGazeHoldProps<T>) {
   const holdStartTimeRef = useRef<number | null>(null);
   const hasTriggeredRef = useRef(false);
 

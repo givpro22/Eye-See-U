@@ -219,7 +219,7 @@ const WebcamManager = () => {
               rects: rectsTensor
             }).then(output => {
               const gaze = output.gaze.data;
-              console.log('Predicted gaze:', gaze);
+              // console.log('Predicted gaze:', gaze);
               const now = Date.now();
               if (now - lastUpdateTime.current > 1) {
                 lastUpdateTime.current = now;
