@@ -1,5 +1,5 @@
 import * as ort from 'onnxruntime-web';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
 import { useGaze } from '../contexts/GazeContext';
@@ -29,7 +29,7 @@ const getBoundingBox = (landmarks: any[], indexes: number[], width: number, heig
 const WebcamManager = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const { gazeResult, setGazeResult } = useGaze();
+  const { gazeResult, setGazeResult, setCursorPos } = useGaze();
 
   const sessionRef = useRef<ort.InferenceSession | null>(null);
   const lastUpdateTime = useRef<number>(0);
@@ -224,6 +224,20 @@ const WebcamManager = () => {
               if (now - lastUpdateTime.current > 1) {
                 lastUpdateTime.current = now;
                 setGazeResult(gaze);
+
+                const gx = gaze[0];
+                const gy = gaze[1];
+
+                const normalizedX = (gx + 4.33) / 0.65;
+                const normalizedY = (gy + 0.4) / 0.65;
+
+                const x = normalizedX * 1000;
+                const y = normalizedY * 500;
+
+                const clampedX = Math.min(Math.max(x, 0), window.innerWidth);
+                const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
+
+                setCursorPos({ x: clampedX, y: clampedY });
               }
             });
           }

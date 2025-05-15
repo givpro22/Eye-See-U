@@ -1,26 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { useGaze } from '../contexts/GazeContext';
 
 function WebcamOverlay() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { gazeResult } = useGaze();
-  const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
+  const { gazeResult, cursorPos } = useGaze();
 
-  useEffect(() => {
-    if (!gazeResult || gazeResult.length !== 2) return;
-
-    const [gx, gy] = gazeResult;
-
-    const normalizedX = (gx + 4.33) / 0.65;
-    const normalizedY = (gy + 0.4) / 0.65;
-
-    const x = normalizedX * 1000;
-    const y = normalizedY * 500;
-    const clampedX = Math.min(Math.max(x, 0), window.innerWidth);
-    const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
-    setCursorPos({ x: clampedX, y: clampedY });
-  }, [gazeResult]);
 
   return (
     <>
