@@ -8,7 +8,7 @@ type Props = {
   onHold: () => void;
 };
 
-const FocusableGazeWrapper = ({ children, holdTimeMs = 5000, onHold }: Props) => {
+const FocusableGazeWrapper = ({ children, holdTimeMs = 1000, onHold }: Props) => {
   const ref = useRef<any>(null);
   const { cursorPos } = useGaze();
 
@@ -16,10 +16,27 @@ const FocusableGazeWrapper = ({ children, holdTimeMs = 5000, onHold }: Props) =>
     targetRef: ref,
     gazePos: cursorPos,
     holdTimeMs,
-    onHoldComplete: onHold,
+    onHoldComplete: () => {
+      console.log('👁️ Gaze hold triggered');
+      console.log('✅ Element bounding box:', ref.current?.getBoundingClientRect());
+      onHold();
+    },
   });
 
-  return <div ref={ref} style={{ display: 'contents' }}>{children}</div>;
+  return (
+    <div
+      ref={ref}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
+      {children}
+    </div>
+  );
+
 };
 
 export default FocusableGazeWrapper;

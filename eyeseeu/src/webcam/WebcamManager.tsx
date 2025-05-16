@@ -33,7 +33,7 @@ const WebcamManager = () => {
 
   const sessionRef = useRef<ort.InferenceSession | null>(null);
   const lastUpdateTime = useRef<number>(0);
-
+  const lastGazeRef = useRef<[number, number]>([0, 0]);
   useEffect(() => {
     ort.InferenceSession.create('/affnet.onnx').then(session => {
       sessionRef.current = session;
@@ -225,11 +225,14 @@ const WebcamManager = () => {
                 lastUpdateTime.current = now;
                 setGazeResult(gaze);
 
-                const gx = gaze[0];
-                const gy = gaze[1];
+                const SMOOTHING = 0.85;
+                const lastGaze = lastGazeRef.current;
+                const gxSmooth = lastGaze[0] * SMOOTHING + gaze[0] * (1 - SMOOTHING);
+                const gySmooth = lastGaze[1] * SMOOTHING + gaze[1] * (1 - SMOOTHING);
+                lastGazeRef.current = [gxSmooth, gySmooth];
 
-                const normalizedX = (gx + 4.33) / 0.65;
-                const normalizedY = (gy + 0.4) / 0.65;
+                const normalizedX = (gxSmooth + 4.33) / 2.5;
+                const normalizedY = (0.4 - gySmooth) / 0.3;
 
                 const x = normalizedX * 1000;
                 const y = normalizedY * 500;
