@@ -32,13 +32,13 @@ const KioskHomeScreen = () => {
           />
         </FocusableGazeWrapper>
 
-        <FocusableGazeWrapper onHold={() => navigate('/menu/popular')}>
+        {/* <FocusableGazeWrapper onHold={() => navigate('/menu/popular')}> */}
           <MenuCategoryCard
             label="인기메뉴"
             icon="popular"
             onClick={() => navigate('/menu/popular')}
           />
-        </FocusableGazeWrapper>
+        {/* </FocusableGazeWrapper> */}
       </div>
 
            {/* 하단 버튼 */}
