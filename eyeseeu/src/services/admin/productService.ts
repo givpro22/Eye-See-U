@@ -12,6 +12,7 @@ export interface AdminProduct {
 
 export interface NewProductPayload {
   categoryId: number;
+  optionGroups: number[];
   name: string;
   description: string;
   price: number;

@@ -14,6 +14,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
 
   const [form, setForm] = useState<NewProductPayload>({
     categoryId: 1,
+    optionGroups: [],
     name: '',
     description: '',
     price: 0,
@@ -21,7 +22,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
     picture: '',
   });
 
-  const [selectedOptionId, setSelectedOptionId] = useState<number>(optionGroups[0]?.id ?? 0);
+  const [selectedOptionId, setSelectedOptionId] = useState<number>(optionGroups[0]?.id ?? 1);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -47,12 +48,13 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
 
   const handleSubmit = async () => {
     try {
-      const payload = { ...form };
+      const payload: NewProductPayload = {
+        ...form,
+        optionGroups: [selectedOptionId],
+      };
       if (!payload.picture?.trim()) {
         delete payload.picture;
       }
-      // You can modify payload to include selectedOptionIds if your API accepts it
-
       const created = await createProduct(payload);
       onCreated(created);
       onClose();
