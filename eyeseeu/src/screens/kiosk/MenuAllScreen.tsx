@@ -1,27 +1,26 @@
 import { useEffect, useState } from 'react';
 import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
-import { mockProducts } from '../../mock/products';
 
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
 
-  // useEffect(() => {
-  //   const loadMenus = async () => {
-  //     try {
-  //       const data = await fetchAllMenus();
-  //       const availableMenus = data.filter((item) => item.state === 'AVAILABLE');
-  //       setMenus(availableMenus);
-  //     } catch (error) {
-  //       console.error('메뉴 불러오기 실패:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const loadMenus = async () => {
+      try {
+        const data = await fetchAllMenus();
+        const visibleMenus = data.filter(
+          (item) => item.state === 'AVAILABLE' || item.state === 'OUT_OF_STOCK'
+        );
+        setMenus(visibleMenus);
+      } catch (error) {
+        console.error('메뉴 불러오기 실패:', error);
+      }
+    };
 
-  //   loadMenus();
-  // }, []);
+    loadMenus();
+  }, []);
 
-   useEffect(() => {
-      setMenus(mockProducts);
-    }, []);
+ 
 
 
   return (
@@ -51,7 +50,15 @@ const MenuAllScreen = () => {
               className="w-full h-24 object-contain mb-2"
             />
             <p className="text-sm font-medium">{menu.name}</p>
-            <p className="text-[#3B00A4] font-semibold">{menu.price.toLocaleString()}원</p>
+            <p className="text-xs text-gray-500 mb-1">{menu.description}</p>
+            <p className={`font-semibold ${menu.state !== 'AVAILABLE' ? 'text-gray-400 line-through' : 'text-[#3B00A4]'}`}>
+              {menu.price.toLocaleString()}원
+            </p>
+            {menu.state !== 'AVAILABLE' && (
+              <p className="text-xs text-red-500 mt-1">
+                {menu.state === 'OUT_OF_STOCK' ? '품절' : '숨김'}
+              </p>
+            )}
           </div>
         ))}
       </div>
