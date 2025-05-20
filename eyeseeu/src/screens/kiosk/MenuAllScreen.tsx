@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
+import ProductCard from '../../components/admin/product/ProductCard';
 
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
@@ -66,23 +67,15 @@ const MenuAllScreen = () => {
               {menus
                 .slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
                 .map((menu) => (
-                  <div key={menu.id} className="bg-white shadow rounded-xl p-2 text-center">
-                    <img
-                      src={menu.picture ?? '/images/menus/default.png'}
-                      alt={menu.name}
-                      className="w-full h-36 object-contain mb-2"
-                    />
-                    <p className="text-sm font-medium">{menu.name}</p>
-                    <p className="text-xs text-gray-500 mb-1">{menu.description}</p>
-                    <p className={`font-semibold ${menu.state !== 'AVAILABLE' ? 'text-gray-400 line-through' : 'text-[#3B00A4]'}`}>
-                      {menu.price.toLocaleString()}원
-                    </p>
-                    {menu.state !== 'AVAILABLE' && (
-                      <p className="text-xs text-red-500 mt-1">
-                        {menu.state === 'OUT_OF_STOCK' ? '품절' : '숨김'}
-                      </p>
-                    )}
-                  </div>
+                  <ProductCard
+                    key={menu.id}
+                    name={menu.name}
+                    price={menu.price}
+                    description={menu.description}
+                    image={menu.picture ?? '/images/menus/default.png'}
+                    state={menu.state}
+                    showHidden={true}
+                  />
                 ))}
             </div>
           ))}

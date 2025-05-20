@@ -93,6 +93,7 @@ const ProductListScreen = () => {
                     price={product.price}
                     description={product.description}
                     image={product.picture ?? '/images/menus/default.png'}
+                    state={product.state}
                   />
                 ))}
             </div>
