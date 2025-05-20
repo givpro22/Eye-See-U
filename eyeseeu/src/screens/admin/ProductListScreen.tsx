@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ProductCard from '../../components/admin/product/ProductCard';
 import AddProductModal from '../../components/admin/product/AddProductModal';
 import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
@@ -12,14 +12,31 @@ const ProductListScreen = () => {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
    useEffect(() => {
     const loadProducts = async () => {
       const data = await fetchAdminProducts();
       setProducts(data);
-      console.log(data)
     };
     loadProducts();
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const pageWidth = container.offsetWidth;
+      const newPage = Math.round(container.scrollLeft / pageWidth);
+      setCurrentPage(newPage);
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleAddProduct = (product: AdminProduct) => {
@@ -54,17 +71,46 @@ const ProductListScreen = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            name={product.name}
-            price={product.price}
-            description={product.description}
-            image={product.picture ?? '/assets/images/menus/default.png'}
-          />
-        ))}
+      {/* Horizontally scrollable paged product list */}
+      <div
+        // @ts-ignore
+        ref={containerRef}
+        className="overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+      >
+        <div className="flex w-full">
+          {Array.from({ length: Math.ceil(products.length / 6) }).map((_, pageIdx) => (
+            <div
+              key={pageIdx}
+              className="grid grid-cols-2 sm:grid-cols-3 gap-6 snap-start shrink-0 w-full px-2"
+              style={{ gridAutoRows: '1fr' }}
+            >
+              {products
+                .slice(pageIdx * 6, pageIdx * 6 + 6)
+                .map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    name={product.name}
+                    price={product.price}
+                    description={product.description}
+                    image={product.picture ?? '/images/menus/default.png'}
+                  />
+                ))}
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* 페이지 인디케이터 */}
+      {products.length > itemsPerPage && (
+        <div className="flex justify-center space-x-1 my-4">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <span
+              key={index}
+              className={`w-2 h-2 rounded-full ${index === currentPage ? 'bg-blue-600' : 'bg-gray-300'}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* 상품 추가 모달 */}
       {isProductModalOpen && (
