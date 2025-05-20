@@ -10,6 +10,7 @@ import PrivateRoute from './PrivateRoute';
 import KioskLayout from '../screens/kiosk/KioskLayout';
 import MenuAllScreen from '../screens/kiosk/MenuAllScreen';
 import KioskPrivateRoute from './KioskPrivateRoute';
+import CalibrationScreen from '../screens/kiosk/CalibrationScreen';
 
 const Router = () => {
 
@@ -39,6 +40,7 @@ const Router = () => {
           <KioskLayout />
         </KioskPrivateRoute>
       }>
+        <Route path="calibration" element={<CalibrationScreen />} />
         <Route path="home" element={<KioskHomeScreen />} />
         {/* 추후 추가될: 주문, 장바구니 등도 여기에 */}
         <Route path="menu/all" element={<MenuAllScreen/>} />

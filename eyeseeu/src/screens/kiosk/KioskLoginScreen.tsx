@@ -18,7 +18,9 @@ const AdminLoginScreen: React.FC = () => {
     try {
       const response = await loginAdmin(email, password);
       login(response.data); // 로그인 성공 시 Context에 저장
-      navigate('/kiosk/home'); // 홈으로 이동
+      // navigate('/kiosk/home'); // 홈으로 이동
+      navigate('/kiosk/calibration'); // 홈으로 이동
+
     } catch (err) {
       console.error(err);
       setError('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.');
