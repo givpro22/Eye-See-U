@@ -234,8 +234,8 @@ const WebcamManager = () => {
                 const normalizedX = (gxSmooth + 4.33) / 2.5;
                 const normalizedY = (0.4 - gySmooth) / 0.3;
 
-                const x = normalizedX * 1000;
-                const y = normalizedY * 500;
+                const x = normalizedX * window.innerWidth;
+                const y = normalizedY * window.innerHeight;
 
                 const clampedX = Math.min(Math.max(x, 0), window.innerWidth);
                 const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
