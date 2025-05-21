@@ -8,8 +8,8 @@ const KioskLayout = () => {
     <div className="relative w-full h-full">
       <Outlet />
 
-      <WebcamManager/>
       <WebcamOverlay/>
+      <WebcamManager/>
 
  
     </div>

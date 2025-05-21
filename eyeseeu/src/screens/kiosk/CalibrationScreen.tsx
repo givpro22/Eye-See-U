@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCalibration } from '../../contexts/CalibrationContext';
 
 const CalibrationScreen = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
+  const { currentStep: step, setCurrentStep: setStep, getAverages } = useCalibration();
   // Calibration sequence: [top-center, bottom-center, left-center, right-center, center]
   const calibrationPoints = [
     { left: '50%', top: '0%' },    // Top-center (actual edge)
@@ -17,8 +18,11 @@ const CalibrationScreen = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (step < totalSteps - 1) {
+        console.log("➡️ advancing to step", step + 1);
         setStep(step + 1);
       } else {
+        setStep(step + 1);
+
         navigate('/kiosk/home');
       }
     }, 4000); // 4초마다 다음 점으로 이동
@@ -53,6 +57,15 @@ const CalibrationScreen = () => {
             )}
             {/* Main calibration dot */}
             <span className="w-16 h-16 rounded-full bg-primary block relative z-10" />
+          </div>
+        ))}
+      </div>
+
+      <div className="absolute bottom-4 left-4 bg-gray-100 p-4 rounded shadow-md z-20 text-sm text-gray-800">
+        <h2 className="font-semibold mb-2">평균 시선 좌표 (gaze)</h2>
+        {getAverages().map((avg, index) => (
+          <div key={index}>
+            위치 {index + 1}: {avg ? `[${avg[0].toFixed(3)}, ${avg[1].toFixed(3)}]` : '측정 안됨'}
           </div>
         ))}
       </div>

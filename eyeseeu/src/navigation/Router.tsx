@@ -11,6 +11,7 @@ import KioskLayout from '../screens/kiosk/KioskLayout';
 import MenuAllScreen from '../screens/kiosk/MenuAllScreen';
 import KioskPrivateRoute from './KioskPrivateRoute';
 import CalibrationScreen from '../screens/kiosk/CalibrationScreen';
+import { CalibrationProvider } from '../contexts/CalibrationContext';
 
 const Router = () => {
 
@@ -36,11 +37,16 @@ const Router = () => {
       <Route path="/kiosk/login" element={<KioskLoginScreen />} />
       {/* 키오스크 내부 라우트: 공통 레이아웃 적용 */}
       <Route path="/kiosk" element={
-        <KioskPrivateRoute>
-          <KioskLayout />
-        </KioskPrivateRoute>
+        <CalibrationProvider>
+          <KioskPrivateRoute>
+            <KioskLayout />
+          </KioskPrivateRoute>
+        </CalibrationProvider>
+
       }>
-        <Route path="calibration" element={<CalibrationScreen />} />
+        <Route path="calibration" element={
+            <CalibrationScreen />
+        } />
         <Route path="home" element={<KioskHomeScreen />} />
         {/* 추후 추가될: 주문, 장바구니 등도 여기에 */}
         <Route path="menu/all" element={<MenuAllScreen/>} />

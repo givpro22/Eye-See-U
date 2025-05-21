@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
 import { useGaze } from '../contexts/GazeContext';
+import { useCalibration } from '../contexts/CalibrationContext';
 
 
 
@@ -30,6 +31,11 @@ const WebcamManager = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { gazeResult, setGazeResult, setCursorPos } = useGaze();
+  const { currentStep, saveGaze } = useCalibration();
+  const currentStepRef = useRef(currentStep);
+  useEffect(() => {
+    currentStepRef.current = currentStep;
+  }, [currentStep]);
 
   const sessionRef = useRef<ort.InferenceSession | null>(null);
   const lastUpdateTime = useRef<number>(0);
@@ -241,6 +247,12 @@ const WebcamManager = () => {
                 const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
 
                 setCursorPos({ x: clampedX, y: clampedY });
+
+
+                // 캘리브레이션 관련 코드임
+                if (currentStepRef.current < 5) {
+                  saveGaze(currentStepRef.current, gaze as [number, number]);
+                }
               }
             });
           }

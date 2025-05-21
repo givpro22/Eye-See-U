@@ -1,3 +1,4 @@
+import { useCalibration } from '../../contexts/CalibrationContext';
 import { useNavigate } from 'react-router-dom';
 import MenuCategoryCard from '../../components/kiosk/MenuCategoryCard';
 import BottomActionButtons from '../../components/kiosk/BottomActionButtons';
@@ -5,7 +6,8 @@ import FocusableGazeWrapper from '../../components/common/FocusableGazeWrapper';
 
 const KioskHomeScreen = () => {
   const navigate = useNavigate();
-
+  const { getAverages } = useCalibration();
+  console.log(getAverages())
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-white to-[#f7f7fc] px-6 py-4">
       {/* 상단: 로고/문구 + 유저 이미지 */}
@@ -45,6 +47,8 @@ const KioskHomeScreen = () => {
            <div className="mt-auto mb-4">
         <BottomActionButtons />
       </div>
+      
+
     </div>
     
   );
