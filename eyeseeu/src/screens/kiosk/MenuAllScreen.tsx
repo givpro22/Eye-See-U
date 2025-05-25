@@ -77,7 +77,7 @@ const MenuAllScreen = () => {
                     image={menu.picture ?? '/images/menus/default.png'}
                     state={menu.state}
                     showHidden={true}
-                    onClick={() => navigate(`/menu/${menu.id}`)}
+                    onClick={() => navigate(`/kiosk/menu/${menu.id}`)}
                   />
                 ))}
             </div>

@@ -23,7 +23,6 @@ export const CalibrationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const gazeLogs = useState<Gaze[][]>([[], [], [], [], []])[0];
 
   const saveGaze = (step: number, gaze: Gaze) => {
-    console.log(`📌 Gaze 저장됨 | Step: ${step} | Gaze: ${gaze}`);
     if (step >= 0 && step < gazeLogs.length) {
       gazeLogs[step].push(gaze);
     }
