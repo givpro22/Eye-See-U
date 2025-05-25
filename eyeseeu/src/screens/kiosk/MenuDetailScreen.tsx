@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchOptionGroups, OptionGroupResponse } from '../../services/admin/optionService';
 import { fetchAdminProducts, NewProductPayload } from '../../services/admin/productService';
+import { useAppDispatch } from '../../store/hooks';
+import { addToCart } from '../../store/slices/cartSlice';
 
 const MenuDetailScreen = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [menu, setMenu] = useState<NewProductPayload | null>(null);
   const [optionGroups, setOptionGroups] = useState<OptionGroupResponse[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const loadMenu = async () => {
@@ -37,11 +43,11 @@ const MenuDetailScreen = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-b from-white to-[#f7f7fc] px-6 py-4">
+    <div className="flex flex-col h-screen bg-white px-6 py-4">
       {/* 상단 바 */}
       <div className="flex items-center justify-between mb-6">
-        <button onClick={() => window.history.back()} className="text-xl text-gray-600">&larr;</button>
-        <h2 className="text-lg font-bold text-[#2D1C6B]">메뉴 상세</h2>
+        <button onClick={() => window.history.back()}>&larr;</button>
+        <h2 className="text-lg font-bold text-black">메뉴 상세</h2>
         <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300" />
       </div>
 
@@ -59,7 +65,7 @@ const MenuDetailScreen = () => {
 
       {/* 옵션 선택 */}
       <div className="flex-1 overflow-y-auto mb-4">
-        <h2 className="text-lg font-semibold text-[#2D1C6B] mb-3">옵션 선택</h2>
+        <h2 className="text-lg font-semibold text-black mb-3">옵션 선택</h2>
         {optionGroups.length === 0 ? (
           <div className="text-gray-500 text-sm">옵션 항목이 없습니다.</div>
         ) : (
@@ -68,10 +74,21 @@ const MenuDetailScreen = () => {
               <p className="font-semibold text-gray-700 mb-1">{group.name}</p>
               <div className="space-y-2 pl-2">
                 {group.options.map((option, idx) => (
-                  <label key={idx} className="flex items-center space-x-2">
-                    <input type="checkbox" className="form-checkbox text-purple-600" />
-                    <span>{option.name} (+{option.price.toLocaleString()}원)</span>
-                  </label>
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setSelectedOptions(prev =>
+                        prev.includes(option.id)
+                          ? prev.filter(id => id !== option.id)
+                          : [...prev, option.id]
+                      );
+                    }}
+                    className={`w-full text-left border rounded-lg px-4 py-2 hover:bg-[#EDEAFF] transition ${
+                      selectedOptions.includes(option.id) ? 'border-[#6C4ED9] bg-[#EDEAFF]' : ''
+                    }`}
+                  >
+                    {option.name} (+{option.price.toLocaleString()}원)
+                  </button>
                 ))}
               </div>
             </div>
@@ -79,8 +96,37 @@ const MenuDetailScreen = () => {
         )}
       </div>
 
+      {/* 수량 선택 */}
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm font-medium text-gray-700">수량</span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setQuantity(q => Math.max(1, q - 1))}
+            className="px-3 py-1 border rounded text-lg"
+          >−</button>
+          <span>{quantity}</span>
+          <button
+            onClick={() => setQuantity(q => q + 1)}
+            className="px-3 py-1 border rounded text-lg"
+          >+</button>
+        </div>
+      </div>
+
       {/* 장바구니 버튼 */}
-      <button className="w-full bg-[#6C4ED9] text-white py-3 rounded-xl font-semibold text-center mt-auto">
+      <button
+        className="w-full bg-[#6C4ED9] text-white py-3 rounded-xl font-semibold text-center mt-auto"
+        onClick={() => {
+          dispatch(addToCart({
+            productId: menu.id,
+            name: menu.name,
+            price: menu.price,
+            image: menu.picture,
+            options: selectedOptions,
+            quantity,
+          }));
+          navigate('/kiosk/menu/all');
+        }}
+      >
         장바구니에 담기
       </button>
     </div>

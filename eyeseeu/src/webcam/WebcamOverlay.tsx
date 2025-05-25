@@ -9,7 +9,7 @@ function WebcamOverlay() {
 
   return (
     <>
-      <video
+      {/* <video
         ref={videoRef}
         className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none"
         autoPlay
@@ -19,7 +19,7 @@ function WebcamOverlay() {
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
-      />
+      /> */}
       {cursorPos && (
         <div
           className="absolute z-50 w-6 h-6 bg-red-500 rounded-full opacity-70 pointer-events-none"

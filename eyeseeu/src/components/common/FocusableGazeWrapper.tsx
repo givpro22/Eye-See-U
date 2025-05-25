@@ -67,39 +67,26 @@ const FocusableGazeWrapper = ({ children, holdTimeMs = 2000, onHold }: Props) =>
   }, [isGazeInside, holdTimeMs]);
 
   return (
-    <div
-      ref={ref}
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-      }}
-    >
-      <div style={{         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%'}}>
-        {children}
-        {isGazeInside && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              padding: '2px 6px',
-              backgroundColor: 'rgba(255,0,0,0.7)',
-              color: '#fff',
-              fontSize: '0.75rem',
-              borderRadius: '0 0 0 5px',
-              zIndex: 10,
-            }}
-          >
-            {remainingTime}s
-          </div>
-        )}
-      </div>
-    </div>
+    <span ref={ref} style={{ position: 'relative' }}>
+      {children}
+      {isGazeInside && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            padding: '2px 6px',
+            backgroundColor: 'rgba(255,0,0,0.7)',
+            color: '#fff',
+            fontSize: '0.75rem',
+            borderRadius: '0 0 0 5px',
+            zIndex: 10,
+          }}
+        >
+          {remainingTime}s
+        </div>
+      )}
+    </span>
   );
 
 };

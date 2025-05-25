@@ -24,23 +24,28 @@ const KioskHomeScreen = () => {
       </div>
 
       {/* 중간: 메뉴 선택 카드 */}
+      
       <div className="flex flex-col items-center gap-6 mt-10 w-full">
-        <FocusableGazeWrapper onHold={() => navigate('/kiosk/menu/all')}>
-          <MenuCategoryCard
-            label="전체메뉴"
-            icon="menu"
-            active
-            onClick={() => navigate('/kiosk/menu/all')}
-          />
-        </FocusableGazeWrapper>
+        <div className="w-full max-w-screen-md">
+          <FocusableGazeWrapper onHold={() => navigate('/kiosk/menu/all')}>
+            <MenuCategoryCard
+              label="전체메뉴"
+              icon="menu"
+              active
+              onClick={() => navigate('/kiosk/menu/all')}
+            />
+          </FocusableGazeWrapper>
+        </div>
 
-        {/* <FocusableGazeWrapper onHold={() => navigate('/menu/popular')}> */}
-          <MenuCategoryCard
-            label="인기메뉴"
-            icon="popular"
-            onClick={() => navigate('/menu/popular')}
-          />
-        {/* </FocusableGazeWrapper> */}
+        <div className="w-full max-w-screen-md">
+          <FocusableGazeWrapper onHold={() => navigate('/menu/popular')}>
+            <MenuCategoryCard
+              label="인기메뉴"
+              icon="popular"
+              onClick={() => navigate('/menu/popular')}
+            />
+          </FocusableGazeWrapper>
+        </div>
       </div>
 
            {/* 하단 버튼 */}

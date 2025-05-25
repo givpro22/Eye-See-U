@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
 import ProductCard from '../../components/admin/product/ProductCard';
+import FocusableGazeWrapper from '../../components/common/FocusableGazeWrapper';
+import { useAppSelector } from '../../store/hooks';
 
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
@@ -10,6 +12,7 @@ const MenuAllScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const cartCount = useAppSelector(state => state.cart.items.length);
 
   useEffect(() => {
     const loadMenus = async () => {
@@ -45,7 +48,7 @@ const MenuAllScreen = () => {
     <div className="relative w-full h-full px-4 py-2 bg-white">
       {/* 상단 바 */}
       <div className="flex items-center justify-between mb-4">
-        <button className="text-sm">&larr;</button>
+        <button className="text-sm" onClick={() => navigate(-1)}>&larr;</button>
         <h2 className="text-lg font-semibold">전체메뉴</h2>
         <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
         </div>
@@ -69,16 +72,17 @@ const MenuAllScreen = () => {
               {menus
                 .slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
                 .map((menu) => (
-                  <ProductCard
-                    key={menu.id}
-                    name={menu.name}
-                    price={menu.price}
-                    description={menu.description}
-                    image={menu.picture ?? '/images/menus/default.png'}
-                    state={menu.state}
-                    showHidden={true}
-                    onClick={() => navigate(`/kiosk/menu/${menu.id}`)}
-                  />
+                  <FocusableGazeWrapper key={menu.id} onHold={() => navigate(`/kiosk/menu/${menu.id}`)}>
+                    <ProductCard
+                      name={menu.name}
+                      price={menu.price}
+                      description={menu.description}
+                      image={menu.picture ?? '/images/menus/default.png'}
+                      state={menu.state}
+                      showHidden={true}
+                      onClick={() => navigate(`/kiosk/menu/${menu.id}`)}
+                    />
+                  </FocusableGazeWrapper>
                 ))}
             </div>
           ))}
@@ -97,7 +101,9 @@ const MenuAllScreen = () => {
         </div>
         <div className="flex justify-between space-x-2">
           <button className="flex-1 bg-[#EDEAFF] py-3 rounded-xl text-sm font-semibold">🎤 직원 호출</button>
-          <button className="flex-1 bg-[#EDEAFF] py-3 rounded-xl text-sm font-semibold">장바구니 이동하기</button>
+          <button className="flex-1 bg-[#EDEAFF] py-3 rounded-xl text-sm font-semibold">
+            🛒 장바구니 이동하기 ({cartCount})
+          </button>
         </div>
       </div>
 

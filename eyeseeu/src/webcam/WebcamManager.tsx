@@ -227,7 +227,7 @@ const WebcamManager = () => {
               const gaze = output.gaze.data;
               // console.log('Predicted gaze:', gaze);
               const now = Date.now();
-              if (now - lastUpdateTime.current > 1) {
+              if (now - lastUpdateTime.current > 0.0001) {
                 lastUpdateTime.current = now;
                 setGazeResult(gaze);
 

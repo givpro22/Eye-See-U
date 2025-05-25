@@ -5,9 +5,10 @@ interface Props {
   icon: 'menu' | 'popular';
   active?: boolean;
   onClick: () => void;
+  children?: React.ReactNode;
 }
 
-const MenuCategoryCard: React.FC<Props> = ({ label, icon, active = false, onClick }) => {
+const MenuCategoryCard: React.FC<Props> = ({ label, icon, active = false, onClick, children }) => {
   const bgColor = active ? 'bg-purple-400 text-white' : 'bg-white text-purple-900';
   const iconPath = icon === 'menu' ? '/assets/icons/menu.svg' : '/assets/icons/popular.svg';
 
@@ -18,6 +19,7 @@ const MenuCategoryCard: React.FC<Props> = ({ label, icon, active = false, onClic
     >
       {/* <img src={iconPath} alt={label} className="w-14 h-14 mb-4" /> */}
       <span className="text-2xl font-bold">{label}</span>
+      {children}
     </button>
   );
 };
