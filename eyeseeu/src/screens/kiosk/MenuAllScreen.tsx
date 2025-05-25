@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
 import ProductCard from '../../components/admin/product/ProductCard';
 
@@ -8,6 +9,7 @@ const MenuAllScreen = () => {
   const totalPages = Math.ceil(menus.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadMenus = async () => {
@@ -75,6 +77,7 @@ const MenuAllScreen = () => {
                     image={menu.picture ?? '/images/menus/default.png'}
                     state={menu.state}
                     showHidden={true}
+                    onClick={() => navigate(`/menu/${menu.id}`)}
                   />
                 ))}
             </div>

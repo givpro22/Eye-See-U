@@ -3,7 +3,9 @@ import ProductCard from '../../components/admin/product/ProductCard';
 import AddProductModal from '../../components/admin/product/AddProductModal';
 import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
 import OptionManagerModal from '../../components/admin/option/OptionManagerModal';
+
 import { AdminProduct, fetchAdminProducts } from '../../services/admin/productService';
+import ProductDetailModal from '../../components/admin/product/ProductDetailModal';
 // import { mockProducts } from '../../mock/products';
 
 const ProductListScreen = () => {
@@ -11,13 +13,18 @@ const ProductListScreen = () => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-   useEffect(() => {
+  const handleProductClick = (product: AdminProduct) => {
+    setSelectedProduct(product);
+  };
+
+  useEffect(() => {
     const loadProducts = async () => {
       const data = await fetchAdminProducts();
       setProducts(data);
@@ -43,7 +50,10 @@ const ProductListScreen = () => {
     setProducts((prev) => [...prev, product]);
   };
 
-
+  const handleDeleteProduct = (id: number) => {
+    setProducts(prev => prev.filter(p => p.id !== id));
+    setSelectedProduct(null);
+  };
 
   return (
     <div className="p-6">
@@ -94,6 +104,7 @@ const ProductListScreen = () => {
                     description={product.description}
                     image={product.picture ?? '/images/menus/default.png'}
                     state={product.state}
+                    onClick={() => handleProductClick(product)}
                   />
                 ))}
             </div>
@@ -133,6 +144,14 @@ const ProductListScreen = () => {
         <OptionManagerModal
           open={isOptionModalOpen}
           onClose={() => setIsOptionModalOpen(false)}
+        />
+      )}
+
+      {selectedProduct && (
+        <ProductDetailModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onDelete={handleDeleteProduct}
         />
       )}
     </div>
