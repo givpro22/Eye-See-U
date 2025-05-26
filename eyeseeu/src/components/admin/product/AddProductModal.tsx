@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCategories } from '../../../services/admin/categoryService';
 import { fetchOptionGroups, OptionGroupResponse } from '../../../services/admin/optionService';
-import { AdminProduct, createProduct, NewProductPayload, NewProductPayload123 } from '../../../services/admin/productService';
+import { AdminProduct, createProduct, NewProductPayload123 } from '../../../services/admin/productService';
 
 interface AddProductModalProps {
   onClose: () => void;

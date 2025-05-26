@@ -2,13 +2,12 @@ import React from 'react';
 
 interface Props {
   label: string;
-  icon: 'menu' | 'popular';
   active?: boolean;
   onClick: () => void;
   children?: React.ReactNode;
 }
 
-const MenuCategoryCard: React.FC<Props> = ({ label, icon, active = false, onClick, children }) => {
+const MenuCategoryCard: React.FC<Props> = ({ label, active = false, onClick, children }) => {
   const bgColor = active ? 'bg-purple-400 text-white' : 'bg-white text-purple-900';
 
   return (
