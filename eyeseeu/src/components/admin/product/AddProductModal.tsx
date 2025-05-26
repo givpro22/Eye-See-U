@@ -48,7 +48,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
 
   const handleSubmit = async () => {
     try {
-      const payload: NewProductPayload = {
+      const payload: NewProductPayload123 = {
         ...form,
         optionGroups: [selectedOptionId],
       };

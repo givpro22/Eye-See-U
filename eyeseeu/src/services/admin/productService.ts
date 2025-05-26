@@ -36,7 +36,7 @@ export const fetchAdminProducts = async (): Promise<NewProductPayload[]> => {
   return response.data;
 };
 
-export const createProduct = async (productData: NewProductPayload): Promise<AdminProduct> => {
+export const createProduct = async (productData: NewProductPayload123): Promise<AdminProduct> => {
   const response = await api.post('/products', productData);
   return response.data;
 };

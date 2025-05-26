@@ -10,7 +10,6 @@ interface Props {
 
 const MenuCategoryCard: React.FC<Props> = ({ label, icon, active = false, onClick, children }) => {
   const bgColor = active ? 'bg-purple-400 text-white' : 'bg-white text-purple-900';
-  const iconPath = icon === 'menu' ? '/assets/icons/menu.svg' : '/assets/icons/popular.svg';
 
   return (
     <button
