@@ -21,6 +21,16 @@ export interface NewProductPayload {
   picture?: string | null;
 }
 
+export interface NewProductPayload123 {
+  categoryId: number;
+  optionGroups: number[];
+  name: string;
+  description: string;
+  price: number;
+  state: 'AVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
+  picture?: string | null;
+}
+
 export const fetchAdminProducts = async (): Promise<NewProductPayload[]> => {
   const response = await api.get('/products'); // 쿠키 포함되어야 하므로 api.ts에서 withCredentials: true 설정
   return response.data;

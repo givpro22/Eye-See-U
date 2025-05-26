@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCategories } from '../../../services/admin/categoryService';
 import { fetchOptionGroups, OptionGroupResponse } from '../../../services/admin/optionService';
-import { AdminProduct, createProduct, NewProductPayload } from '../../../services/admin/productService';
+import { AdminProduct, createProduct, NewProductPayload, NewProductPayload123 } from '../../../services/admin/productService';
 
 interface AddProductModalProps {
   onClose: () => void;
@@ -12,7 +12,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onCreated })
   const [categoryOptions, setCategoryOptions] = useState<{ id: number; name: string }[]>([]);
   const [optionGroups, setOptionGroups] = useState<OptionGroupResponse[]>([]);
 
-  const [form, setForm] = useState<NewProductPayload>({
+  const [form, setForm] = useState<NewProductPayload123>({
     categoryId: 1,
     optionGroups: [],
     name: '',

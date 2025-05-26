@@ -1,9 +1,7 @@
-import { useRef } from 'react';
 import { useGaze } from '../contexts/GazeContext';
 
 function WebcamOverlay() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const { gazeResult, cursorPos } = useGaze();
 
 

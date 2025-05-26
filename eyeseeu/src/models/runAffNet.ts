@@ -47,7 +47,7 @@ export const runAffNet = async (
   const faceTensor = new ort.Tensor('float32', preprocessImage(face, [224, 224]), [1, 3, 224, 224]);
   const rectsTensor = new ort.Tensor('float32', Float32Array.from(rects), [1, 12]);
 
-  const feeds: Record<string, ort.Tensor> = {
+  const feeds: any = {
     leftEyeImg: leftEyeTensor,
     rightEyeImg: rightEyeTensor,
     faceImg: faceTensor,

@@ -15,7 +15,6 @@ const FocusableGazeWrapper = ({ children, holdTimeMs = 2000, onHold }: Props) =>
   // Track if gaze is inside the element
   const [isGazeInside, setIsGazeInside] = useState(false);
   const [remainingTime, setRemainingTime] = useState((holdTimeMs / 1000).toFixed(1));
-  // Track previous inside status to reset timer
 
   useGazeHold({
     targetRef: ref,
