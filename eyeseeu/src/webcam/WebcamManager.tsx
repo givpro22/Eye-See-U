@@ -101,11 +101,11 @@ const WebcamManager = () => {
 
           // === Face bounding box and face grid vector ===
           // All face points (468)
-          const allPoints = landmarks.map(lm => {
-            const x = lm.x * width;
-            const y = lm.y * height;
-            return [x, y];
-          });
+          // const allPoints = landmarks.map(lm => {
+          //   const x = lm.x * width;
+          //   const y = lm.y * height;
+          //   return [x, y];
+          // });
           const faceBox = getBoundingBox(landmarks, Array.from({ length: 468 }, (_, i) => i), width, height);
 
           // Draw face box in orange
