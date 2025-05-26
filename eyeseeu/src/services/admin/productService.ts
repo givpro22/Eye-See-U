@@ -5,7 +5,7 @@ export interface AdminProduct {
   name: string;
   description: string;
   price: number;
-  picture: string | null;
+  picture?: string | null;
   state: 'AVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
   categoryId: number;
 }
@@ -18,7 +18,7 @@ export interface NewProductPayload {
   description: string;
   price: number;
   state: 'AVAILABLE' | 'OUT_OF_STOCK' | 'HIDDEN';
-  picture?: string;
+  picture?: string | null;
 }
 
 export const fetchAdminProducts = async (): Promise<NewProductPayload[]> => {
@@ -31,8 +31,8 @@ export const createProduct = async (productData: NewProductPayload): Promise<Adm
   return response.data;
 };
 
-export const updateProduct = async (id: number,updatedData: NewProductPayload): Promise<AdminProduct> => {
-  const response = await api.patch(`/products/${id}`, updatedData);
+export const updateProduct = async (updatedData: NewProductPayload): Promise<AdminProduct> => {
+  const response = await api.patch(`/products/${updatedData.id}`, updatedData);
   return response.data;
 };
 

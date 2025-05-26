@@ -100,7 +100,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
               <button
                 onClick={async () => {
                   console.log(editData)
-                  await updateProduct(product.id, {
+                  await updateProduct({
+                    id: product.id,
                     categoryId: editData.categoryId,
                     optionGroups: editData.optionGroups,
                     name: editData.name,

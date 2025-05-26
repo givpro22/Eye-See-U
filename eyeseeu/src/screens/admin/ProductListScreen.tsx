@@ -4,7 +4,7 @@ import AddProductModal from '../../components/admin/product/AddProductModal';
 import CategoryManagerModal from '../../components/admin/category/CategoryManagerModal';
 import OptionManagerModal from '../../components/admin/option/OptionManagerModal';
 
-import { AdminProduct, fetchAdminProducts } from '../../services/admin/productService';
+import { AdminProduct, fetchAdminProducts, NewProductPayload } from '../../services/admin/productService';
 import ProductDetailModal from '../../components/admin/product/ProductDetailModal';
 // import { mockProducts } from '../../mock/products';
 
@@ -13,14 +13,14 @@ const ProductListScreen = () => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<NewProductPayload | null>(null);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleProductClick = (product: AdminProduct) => {
+  const handleProductClick = (product: any) => {
     setSelectedProduct(product);
   };
 

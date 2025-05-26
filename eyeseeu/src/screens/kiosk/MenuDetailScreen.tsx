@@ -73,18 +73,18 @@ const MenuDetailScreen = () => {
             <div key={group.id} className="mb-4">
               <p className="font-semibold text-gray-700 mb-1">{group.name}</p>
               <div className="space-y-2 pl-2">
-                {group.options.map((option, idx) => (
+                {group.options.map((option: any, idx) => (
                   <button
                     key={idx}
                     onClick={() => {
                       setSelectedOptions(prev =>
-                        prev.includes(option.id)
-                          ? prev.filter(id => id !== option.id)
-                          : [...prev, option.id]
+                        prev.includes(idx)
+                          ? prev.filter(id => id !== idx)
+                          : [...prev, idx]
                       );
                     }}
                     className={`w-full text-left border rounded-lg px-4 py-2 hover:bg-[#EDEAFF] transition ${
-                      selectedOptions.includes(option.id) ? 'border-[#6C4ED9] bg-[#EDEAFF]' : ''
+                      selectedOptions.includes(idx) ? 'border-[#6C4ED9] bg-[#EDEAFF]' : ''
                     }`}
                   >
                     {option.name} (+{option.price.toLocaleString()}원)
@@ -120,7 +120,7 @@ const MenuDetailScreen = () => {
             productId: menu.id,
             name: menu.name,
             price: menu.price,
-            image: menu.picture,
+            image: menu.picture ?? undefined,
             options: selectedOptions,
             quantity,
           }));
