@@ -27,6 +27,12 @@ const getBoundingBox = (landmarks: any[], indexes: number[], width: number, heig
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
 };
 
+let pauseWebcam = false;
+
+export const setWebcamPaused = (value: boolean) => {
+  pauseWebcam = value;
+};
+
 const WebcamManager = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -69,6 +75,7 @@ const WebcamManager = () => {
     });
 
     faceMesh.onResults((results) => {
+      if (pauseWebcam) return;
       canvasCtx.save();
       const width = canvasRef.current!.width;
       const height = canvasRef.current!.height;
@@ -264,6 +271,7 @@ const WebcamManager = () => {
 
     const camera = new Camera(videoRef.current, {
       onFrame: async () => {
+        if (pauseWebcam) return;
         if (videoRef.current) {
           if (
             canvasRef.current!.width !== videoRef.current.videoWidth ||

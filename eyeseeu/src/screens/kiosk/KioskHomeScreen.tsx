@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MenuCategoryCard from '../../components/kiosk/MenuCategoryCard';
 import BottomActionButtons from '../../components/kiosk/BottomActionButtons';
 import FocusableGazeWrapper from '../../components/common/FocusableGazeWrapper';
+import { setWebcamPaused } from '../../webcam/WebcamManager';
 
 const KioskHomeScreen = () => {
   const navigate = useNavigate();
@@ -27,20 +28,40 @@ const KioskHomeScreen = () => {
       
       <div className="flex flex-col items-center gap-6 mt-10 w-full">
         <div className="w-full max-w-screen-md">
-          <FocusableGazeWrapper onHold={() => navigate('/kiosk/menu/all')}>
+          <FocusableGazeWrapper
+            onHold={() => {
+              setWebcamPaused(true);
+              setTimeout(() => setWebcamPaused(false), 1000);
+              navigate('/kiosk/menu/all');
+            }}
+          >
             <MenuCategoryCard
               label="전체메뉴"
               active
-              onClick={() => navigate('/kiosk/menu/all')}
+              onClick={() => {
+                setWebcamPaused(true);
+                setTimeout(() => setWebcamPaused(false), 1000);
+                navigate('/kiosk/menu/all');
+              }}
             />
           </FocusableGazeWrapper>
         </div>
 
         <div className="w-full max-w-screen-md">
-          <FocusableGazeWrapper onHold={() => navigate('/menu/popular')}>
+          <FocusableGazeWrapper
+            onHold={() => {
+              setWebcamPaused(true);
+              setTimeout(() => setWebcamPaused(false), 1000);
+              navigate('/menu/popular');
+            }}
+          >
             <MenuCategoryCard
               label="인기메뉴"
-              onClick={() => navigate('/menu/popular')}
+              onClick={() => {
+                setWebcamPaused(true);
+                setTimeout(() => setWebcamPaused(false), 1000);
+                navigate('/menu/popular');
+              }}
             />
           </FocusableGazeWrapper>
         </div>

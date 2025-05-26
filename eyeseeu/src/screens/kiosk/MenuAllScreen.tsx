@@ -4,6 +4,7 @@ import { fetchAllMenus, ProductInfo } from '../../services/kiosk/menuService';
 import ProductCard from '../../components/admin/product/ProductCard';
 import FocusableGazeWrapper from '../../components/common/FocusableGazeWrapper';
 import { useAppSelector } from '../../store/hooks';
+import { setWebcamPaused } from '../../webcam/WebcamManager';
 
 const MenuAllScreen = () => {
   const [menus, setMenus] = useState<ProductInfo[]>([]);
@@ -72,7 +73,13 @@ const MenuAllScreen = () => {
               {menus
                 .slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
                 .map((menu) => (
-                  <FocusableGazeWrapper key={menu.id} onHold={() => navigate(`/kiosk/menu/${menu.id}`)}>
+                  <FocusableGazeWrapper key={menu.id} onHold={() => {
+                    setWebcamPaused(true);
+                    setTimeout(() => {
+                      setWebcamPaused(false);
+                      navigate(`/kiosk/menu/${menu.id}`);
+                    }, 1000);
+                  }}>
                     <ProductCard
                       name={menu.name}
                       price={menu.price}
@@ -80,7 +87,13 @@ const MenuAllScreen = () => {
                       image={menu.picture ?? '/images/menus/default.png'}
                       state={menu.state}
                       showHidden={true}
-                      onClick={() => navigate(`/kiosk/menu/${menu.id}`)}
+                      onClick={() => {
+                        setWebcamPaused(true);
+                        setTimeout(() => {
+                          setWebcamPaused(false);
+                          navigate(`/kiosk/menu/${menu.id}`);
+                        }, 1000);
+                      }}
                     />
                   </FocusableGazeWrapper>
                 ))}

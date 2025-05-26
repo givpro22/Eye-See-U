@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCalibration } from '../../contexts/CalibrationContext';
+import { setWebcamPaused } from '../../webcam/WebcamManager';
 
 const CalibrationScreen = () => {
   const navigate = useNavigate();
@@ -22,8 +23,11 @@ const CalibrationScreen = () => {
         setStep(step + 1);
       } else {
         setStep(step + 1);
-
-        navigate('/kiosk/home');
+        setWebcamPaused(true);
+        setTimeout(() => {
+          setWebcamPaused(false);
+          navigate('/kiosk/home');
+        }, 1000);
       }
     }, 4000); // 4초마다 다음 점으로 이동
 
