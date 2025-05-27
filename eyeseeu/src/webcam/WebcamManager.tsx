@@ -12,6 +12,7 @@ import { useCalibration } from '../contexts/CalibrationContext';
 const LEFT_EYE_INDEXES = [33, 246, 161, 160, 159, 158, 157, 173, 133, 155, 154, 153, 145, 144, 163, 7, 130, 247, 30, 29, 27, 28, 56, 190, 243, 112, 26, 22, 23, 24, 110, 25];
 const RIGHT_EYE_INDEXES = [362, 398, 384, 385, 386, 387, 388, 466, 263, 249, 390, 373, 374, 380, 381, 382, 463, 414, 286, 258, 257, 259, 260, 467, 359, 255, 339, 254, 253, 252, 256, 341];
 
+
 const getBoundingBox = (landmarks: any[], indexes: number[], width: number, height: number) => {
   const points = indexes.map(i => {
     const x = landmarks[i].x * width;
@@ -34,6 +35,8 @@ export const setWebcamPaused = (value: boolean) => {
 };
 
 const WebcamManager = () => {
+  const { getAverages } = useCalibration();
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { gazeResult, setGazeResult, setCursorPos } = useGaze();
@@ -232,6 +235,7 @@ const WebcamManager = () => {
               rects: rectsTensor
             }).then(output => {
               const gaze = output.gaze.data;
+              console.log('📌 getAverages():', getAverages());
               // console.log('Predicted gaze:', gaze);
               const now = Date.now();
               if (now - lastUpdateTime.current > 0.0001) {
@@ -244,15 +248,31 @@ const WebcamManager = () => {
                 const gySmooth = lastGaze[1] * SMOOTHING + gaze[1] * (1 - SMOOTHING);
                 lastGazeRef.current = [gxSmooth, gySmooth];
 
-                const normalizedX = (gxSmooth + 4.33) / 2.5;
-                const normalizedY = (0.4 - gySmooth) / 0.3;
+                // Calibration-based normalization
+                const averages = getAverages();
+                const top = averages[0];
+                const bottom = averages[1];
+                const left = averages[2];
+                const right = averages[3];
+                const center = averages[4];
+
+                let normalizedX = 0.5;
+                let normalizedY = 0.5;
+
+                if (left && right && center) {
+                  const totalX = right[0] - left[0];
+                  normalizedX = totalX !== 0 ? (gxSmooth - left[0]) / totalX : 0.5;
+                }
+
+                if (top && bottom && center) {
+                  const totalY = bottom[1] - top[1];
+                  normalizedY = totalY !== 0 ? (gySmooth - top[1]) / totalY : 0.5;
+                }
 
                 const x = normalizedX * window.innerWidth;
                 const y = normalizedY * window.innerHeight;
-
                 const clampedX = Math.min(Math.max(x, 0), window.innerWidth);
                 const clampedY = Math.min(Math.max(y, 0), window.innerHeight);
-
                 setCursorPos({ x: clampedX, y: clampedY });
 
 
