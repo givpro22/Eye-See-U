@@ -17,11 +17,7 @@ const KioskHomeScreen = () => {
           <h1 className="text-xl font-extrabold text-[#2D1C6B]">Eye See You</h1>
           <p className="text-sm text-gray-500">시선으로 주문해보세요</p>
         </div>
-        <img
-          src="/assets/images/user.png"
-          alt="User"
-          className="w-14 h-14 rounded-full object-cover border"
-        />
+
       </div>
 
       {/* 중간: 메뉴 선택 카드 */}
